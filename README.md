@@ -57,7 +57,7 @@ Any design frameworks or libraries, if used
 
 1.Clone the repository:
 
-git clone https://github.com/Biratporbo/HTMLPrj.git
+git clone https://github.com/Biratporbo/Purem-Oda-Online-Shopping-App
 
 cd HTMLPrj
 

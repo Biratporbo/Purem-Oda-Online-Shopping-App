@@ -458,3 +458,54 @@ footer {
 .shoe-item:hover img {
   transform: scale(1.05);
 }
+
+
+/**** Kids Collection Section (Premium AI Style) ****/
+.kids-collection {
+  padding: 3em 2em;
+  background-color: #ffffff; /* Contrast against the Women's grey background */
+  text-align: center;
+}
+
+.kids-collection h2 {
+  font-size: 2.2em;
+  color: #333;
+  margin-bottom: 1.5em; /* Spacing for a clean, premium look */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Optional: Add a small decorative underline under the centered title */
+.kids-collection h2::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #a18cd1; /* Matches your banner gradient */
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* Inherits your existing .collection-grid and .collection-item styles */
+/* Adding specific hover refinement for the Kids items */
+.kids-collection .collection-item {
+  border: 1px solid #eee; /* Softer border for premium feel */
+}
+
+.kids-collection .collection-item img {
+  filter: grayscale(20%); /* Modern aesthetic */
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.kids-collection .collection-item:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.03);
+}
+
+.kids-collection .collection-item p {
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  color: #444;
+}

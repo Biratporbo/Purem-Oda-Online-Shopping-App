@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login - Purem Oda</title>
+
+<style>
+/* ===== GLOBAL ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+/* ===== NAVBAR ===== */
+header {
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 2em;
+}
+
+.logo a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+  color: #000;
+}
+
+nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #000;
+  font-weight: 600;
+}
+
+.icon input {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+/* ===== LOGIN SECTION ===== */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+  padding: 2em;
+}
+
+.login-card {
+  background: #ffffff;
+  padding: 2.5em;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.login-card h1 {
+  margin-bottom: 0.3em;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 1.5em;
+  font-size: 14px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.9em;
+  margin-bottom: 1em;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #333;
+  outline: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+}
+
+.login-card button {
+  width: 100%;
+  padding: 0.9em;
+  border: none;
+  border-radius: 8px;
+  background: #333;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-card button:hover {
+  background: #000;
+  letter-spacing: 1px;
+}
+
+.extra-links {
+  margin-top: 1.2em;
+  font-size: 14px;
+}
+
+.extra-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.extra-links a:hover {
+  text-decoration: underline;
+}
+
+.back-home {
+  margin-top: 1em;
+}
+
+.back-home a {
+  text-decoration: none;
+  font-size: 13px;
+  color: #555;
+}
+
+.back-home a:hover {
+  color: #000;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #fff;
+  text-align: center;
+  padding: 1em;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="navbar">
+    <div class="logo"><a href="index.html">PUREM<br>ODA</a></div>
+    <nav>
+      <a href="womens.html">WOMENSWEAR</a>
+      <a href="mens.html">MENSWEAR</a>
+      <a href="kids.html">KIDS</a>
+      <a href="shoes.html">SHOES</a>
+      <a href="baby.html">BABY</a>
+      <a href="about.html">ABOUT</a>
+      <a href="services.html">SERVICES</a>
+      <a href="contact.html">CONTACT</a>
+      <a href="login.html">LOGIN</a>
+    </nav>
+    <div class="icon">
+      <input type="text" placeholder="Search">
+      🛒 👤
+    </div>
+  </div>
+</header>
+
+<main class="login-container">
+  <div class="login-card">
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Sign in to continue shopping at PUREM ODA</p>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="input-group">
+        <input type="email" placeholder="Email Address" required>
+      </div>
+
+      <div class="input-group">
+        <input type="password" placeholder="Password" required>
+      </div>
+
+      <button type="submit">Sign In</button>
+    </form>
+
+    <p class="extra-links">
+      Don't have an account? <a href="#">Register</a>
+    </p>
+
+    <p class="back-home">
+      <a href="index.html">← Back to Home</a>
+    </p>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 Purem Oda. All Rights Reserved.</p>
+</footer>
+
+<script>
+async function handleLogin(event) {
+  event.preventDefault();
+
+  const email = document.querySelector('input[type="email"]').value;
+  const password = document.querySelector('input[type="password"]').value;
+
+  try {
+    const response = await fetch('http://localhost:5000/api/login', {  // <== change to 5000
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert("Login successful!");
+      // optionally redirect:
+      // window.location.href = "index.html";
+    } else {
+      alert("Invalid credentials!");
+    }
+  } catch (err) {
+    alert("Error connecting to server!");
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>

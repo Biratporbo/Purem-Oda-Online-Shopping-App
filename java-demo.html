@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Integration Demo - Order Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .java-demo-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .demo-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .demo-section h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            border-left: 4px solid #28a745;
+            display: none;
+        }
+        .result-box.show {
+            display: block;
+        }
+        .result-box.error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        .result-box pre {
+            margin: 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status-badge.available {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-badge.unavailable {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="java-demo-container">
+        <h1>☕ Java Integration Demo</h1>
+        <p>This page demonstrates Java business logic integration with Node.js/Express backend.</p>
+
+        <!-- Service Status -->
+        <div class="demo-section">
+            <h3>Java Service Status</h3>
+            <button onclick="checkServiceStatus()">Check Status</button>
+            <div id="statusResult" class="result-box"></div>
+        </div>
+
+        <!-- Order Calculator -->
+        <div class="demo-section">
+            <h3>Calculate Order Total (with Tax & Discounts)</h3>
+            <p>Calculate order subtotal, apply discounts for bulk orders (>$100), and compute taxes (8%).</p>
+            
+            <div class="form-group">
+                <label>Order Items (JSON):</label>
+                <textarea id="orderItems" rows="6">{
+  "items": [
+    { "title": "Nike Air Force 1", "price": 120, "quantity": 1 },
+    { "title": "Adidas Samba", "price": 95, "quantity": 1 }
+  ]
+}</textarea>
+            </div>
+
+            <button onclick="calculateOrder()">Calculate Order</button>
+            <button onclick="resetCalculator()">Reset</button>
+
+            <div id="calcResult" class="result-box">
+                <h4>Results:</h4>
+                <pre id="calcOutput"></pre>
+            </div>
+        </div>
+
+        <!-- Order Validator -->
+        <div class="demo-section">
+            <h3>Validate Order</h3>
+            <p>Validate order data before processing (checks for required fields and valid amounts).</p>
+            
+            <div class="form-group">
+                <label>Order Data (JSON):</label>
+                <textarea id="orderData" rows="6">{
+  "customerId": 12345,
+  "items": [
+    { "price": 50, "quantity": 2 }
+  ]
+}</textarea>
+            </div>
+
+            <button onclick="validateOrder()">Validate Order</button>
+            <button onclick="resetValidator()">Reset</button>
+
+            <div id="valResult" class="result-box">
+                <h4>Validation Result:</h4>
+                <pre id="valOutput"></pre>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="demo-section">
+            <h3>API Information</h3>
+            <p><strong>Calculate Endpoint:</strong> POST /api/order/calculate</p>
+            <p><strong>Validate Endpoint:</strong> POST /api/order/validate</p>
+            <p><strong>Status Endpoint:</strong> GET /api/java-service/status</p>
+            <p>
+                For more details, see <a href="JAVA_INTEGRATION_GUIDE.md"  target="_blank">Java Integration Guide</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Check Java Service Status
+        async function checkServiceStatus() {
+            try {
+                const response = await fetch('/api/java-service/status');
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('statusResult');
+                statusDiv.classList.add('show');
+                
+                if (response.ok) {
+                    statusDiv.classList.remove('error');
+                    statusDiv.innerHTML = `
+                        <span class="status-badge available">✓ Service Available</span>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    statusDiv.classList.add('error');
+                    statusDiv.innerHTML = `
+                        <span class="status-badge unavailable">✗ Service Unavailable</span>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                const statusDiv = document.getElementById('statusResult');
+                statusDiv.classList.add('show', 'error');
+                statusDiv.innerHTML = `
+                    <span class="status-badge unavailable">✗ Connection Error</span>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+
+        // Calculate Order
+        async function calculateOrder() {
+            try {
+                const inputText = document.getElementById('orderItems').value;
+                const orderData = JSON.parse(inputText);
+
+                const response = await fetch('/api/order/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                const resultDiv = document.getElementById('calcResult');
+                resultDiv.classList.add('show');
+                resultDiv.classList.remove('error');
+
+                if (result.success) {
+                    document.getElementById('calcOutput').textContent = 
+                        `Subtotal:  $${result.subtotal.toFixed(2)}\n` +
+                        `Discount:  -$${result.discount.toFixed(2)} (10% bulk discount)\n` +
+                        `Tax (8%):  $${result.tax.toFixed(2)}\n` +
+                        `─────────────────────\n` +
+                        `Total:     $${result.total.toFixed(2)}`;
+                } else {
+                    resultDiv.classList.add('error');
+                    document.getElementById('calcOutput').textContent = `Error: ${result.error}`;
+                }
+            } catch (error) {
+                const resultDiv = document.getElementById('calcResult');
+                resultDiv.classList.add('show', 'error');
+                document.getElementById('calcOutput').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function resetCalculator() {
+            document.getElementById('calcResult').classList.remove('show');
+            document.getElementById('orderItems').value = `{
+  "items": [
+    { "title": "Nike Air Force 1", "price": 120, "quantity": 1 },
+    { "title": "Adidas Samba", "price": 95, "quantity": 1 }
+  ]
+}`;
+        }
+
+        // Validate Order
+        async function validateOrder() {
+            try {
+                const inputText = document.getElementById('orderData').value;
+                const orderData = JSON.parse(inputText);
+
+                const response = await fetch('/api/order/validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                const resultDiv = document.getElementById('valResult');
+                resultDiv.classList.add('show');
+                resultDiv.classList.remove('error');
+
+                if (result.success) {
+                    document.getElementById('valOutput').textContent = 
+                        `✓ ${result.message}`;
+                } else {
+                    resultDiv.classList.add('error');
+                    document.getElementById('valOutput').textContent = `✗ ${result.error}`;
+                }
+            } catch (error) {
+                const resultDiv = document.getElementById('valResult');
+                resultDiv.classList.add('show', 'error');
+                document.getElementById('valOutput').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function resetValidator() {
+            document.getElementById('valResult').classList.remove('show');
+            document.getElementById('orderData').value = `{
+  "customerId": 12345,
+  "items": [
+    { "price": 50, "quantity": 2 }
+  ]
+}`;
+        }
+    </script>
+</body>
+</html>

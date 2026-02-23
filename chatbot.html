@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot - Purem Oda</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 400px;
+      max-width: 90%;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #333;
+      color: #fff;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      background: #fafafa;
+    }
+
+    .chat-message {
+      margin-bottom: 10px;
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 20px;
+      clear: both;
+    }
+
+    .user-msg {
+      background: #007bff;
+      color: #fff;
+      float: right;
+    }
+
+    .bot-msg {
+      background: #e0e0e0;
+      float: left;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+
+    .chat-input button {
+      padding: 0 16px;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">Purem Oda Chatbot</div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-input">
+    <input type="text" id="chat-input" placeholder="Ask me something...">
+    <button id="send-btn">Send</button>
+  </div>
+</div>
+
+<script>
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+
+// Simple FAQ-based responses
+const faq = [
+  { q: /shipping/i, a: "We offer free shipping on orders over $50. Standard shipping is 3-5 days." },
+  { q: /return|refund/i, a: "You can return items within 14 days of delivery. Please visit our Returns page." },
+  { q: /size/i, a: "Sizes vary by category. Check each product page for accurate sizing info." },
+  { q: /payment/i, a: "We accept all major credit cards, PayPal, and Apple Pay." },
+  { q: /hello|hi|hey/i, a: "Hello! How can I assist you today?" },
+  { q: /.*/, a: "Sorry, I didn't understand that. Try asking about shipping, returns, or sizes." }
+];
+
+// Append a message to chat
+function addMessage(text, isUser = false) {
+  const div = document.createElement('div');
+  div.className = `chat-message ${isUser ? 'user-msg' : 'bot-msg'}`;
+  div.textContent = text;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Handle sending message
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  addMessage(text, true);
+
+  // Find a matching FAQ
+  const answer = faq.find(f => f.q.test(text))?.a || "Sorry, I didn't understand that.";
+  setTimeout(() => addMessage(answer), 500);
+
+  chatInput.value = '';
+}
+
+// Events
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', e => {
+  if (e.key === 'Enter') sendMessage();
+});
+</script>
+
+</body>
+</html>

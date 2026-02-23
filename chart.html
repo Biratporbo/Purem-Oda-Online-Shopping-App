@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Charts — Purem Oda</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .chart-container { max-width: 900px; margin: 40px auto; padding: 20px; background:#fff; border-radius:8px }
+    .controls { display:flex; gap:10px; margin-bottom:16px }
+    textarea { width:100%; font-family:monospace; font-size:13px }
+  </style>
+</head>
+<body>
+  <main class="chart-container">
+    <h1>Sales / Item Price Demo Chart</h1>
+    <p>This demo fetches `/api/items` and renders a bar chart of item prices. If items have no `price`, demo assigns sample prices.</p>
+
+    <div class="controls">
+      <button id="refreshBtn">Refresh Data</button>
+      <button id="sampleBtn">Use Sample Data</button>
+      <a href="/java-demo.html">Java Demo</a>
+    </div>
+
+    <canvas id="itemsChart" width="800" height="400"></canvas>
+
+    <section style="margin-top:18px">
+      <h3>Raw Data (fetched)</h3>
+      <pre id="rawData">(no data)</pre>
+    </section>
+  </main>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('itemsChart').getContext('2d');
+    let chart = null;
+
+    async function fetchItems() {
+      try {
+        const res = await fetch('/api/items');
+        if (!res.ok) throw new Error('Failed to fetch /api/items');
+        const items = await res.json();
+        return items;
+      } catch (err) {
+        console.warn('Fetch failed, using empty array:', err.message);
+        return [];
+      }
+    }
+
+    function normalizeData(items) {
+      // Ensure each item has a numeric price. If not present, assign demo price.
+      return items.map((it, idx) => {
+        const price = typeof it.price === 'number' ? it.price : (50 + (idx * 15) % 100);
+        return { title: it.title || ('Item ' + (idx+1)), price };
+      });
+    }
+
+    function renderChart(data) {
+      const labels = data.map(d => d.title);
+      const values = data.map(d => d.price);
+
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Price (USD)',
+            data: values,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      document.getElementById('rawData').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function loadAndRender(useSample=false) {
+      let items = [];
+      if (!useSample) items = await fetchItems();
+      if (!items || items.length === 0) {
+        // fallback demo data
+        items = [
+          { title: 'Demo Shoe A', price: 120 },
+          { title: 'Demo Shoe B', price: 95 },
+          { title: 'Demo Shoe C', price: 75 }
+        ];
+      }
+      const normalized = normalizeData(items);
+      renderChart(normalized);
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', () => loadAndRender(false));
+    document.getElementById('sampleBtn').addEventListener('click', () => loadAndRender(true));
+
+    // initial render
+    loadAndRender(false);
+  </script>
+</body>
+</html>

@@ -1,42 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>About - Purem Oda</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About - Purem Oda</title>
+
+<style>
+/* ===== GLOBAL ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+/* ===== NAVBAR ===== */
+header {
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.navbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 1em 2em;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.logo a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+  color: #000;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #000;
+  font-weight: 600;
+}
+
+.icon {
+  text-align: right;
+}
+
+.icon input {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+/* ===== ABOUT SECTION ===== */
+.about-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+  padding: 2em;
+}
+
+.about-card {
+  background: #ffffff;
+  padding: 2.5em;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.about-card h1 {
+  margin-bottom: 0.5em;
+  font-size: 30px;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 1.5em;
+  font-size: 15px;
+}
+
+.about-card p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 15px;
+  margin-bottom: 1em;
+}
+
+/* ===== BUTTON ===== */
+.about-card .btn {
+  display: inline-block;
+  margin-top: 1em;
+  padding: 0.8em 1.5em;
+  border-radius: 8px;
+  background: #333;
+  color: #fff;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.about-card .btn:hover {
+  background: #000;
+  letter-spacing: 1px;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #fff;
+  text-align: center;
+  padding: 1em;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <div class="navbar">
-      <div class="logo"><a href="index.html">PUREM<br>ODA</a></div>
-      <nav aria-label="Main Navigation">
-        <a href="womens.html">WOMENSWEAR</a>
-        <a href="mens.html">MENSWEAR</a>
-        <a href="kids.html">KIDS</a>
-        <a href="shoes.html">SHOES</a>
-        <a href="baby.html">BABY</a>
-        <a href="about.html">ABOUT</a>
-        <a href="services.html">SERVICES</a>
-        <a href="contact.html">CONTACT</a>
-        <a href="login.html">LOGIN</a>
-      </nav>
-      <div class="icon">
-        <input type="text" placeholder="Search">
-        <a href="shoes.html" class="icon">&#128722;</a>
-        <a href="login.html" class="icon">&#128100;</a>
-      </div>
+
+<header>
+  <div class="navbar">
+    <div class="logo"><a href="index.html">PUREM<br>ODA</a></div>
+
+    <nav>
+      <a href="womens.html">WOMENSWEAR</a>
+      <a href="mens.html">MENSWEAR</a>
+      <a href="kids.html">KIDS</a>
+      <a href="shoes.html">SHOES</a>
+      <a href="baby.html">BABY</a>
+      <a href="about.html">ABOUT</a>
+      <a href="services.html">SERVICES</a>
+      <a href="contact.html">CONTACT</a>
+      <a href="login.html">LOGIN</a>
+    </nav>
+
+    <div class="icon">
+      <input type="text" placeholder="Search">
     </div>
-  </header>
-  <main style="padding:2em;">
-    <h1>About Us</h1>
-    <p>Information about Purem Oda. Placeholder page.</p>
-    <p><a href="index.html">Back to Home</a></p>
-  </main>
-  <footer>
-    <div class="footer-content">
-      <p>&copy; 2024 Purem Oda. All Rights Reserved.</p>
-    </div>
-  </footer>
+  </div>
+</header>
+
+<main class="about-container">
+  <div class="about-card">
+    <h1>About Purem Oda</h1>
+    <p class="subtitle">FOR EVERYONE BUT NOT ANYONE</p>
+
+    <p>
+      At <strong>PUREM ODA</strong>, we believe fashion is more than clothing —
+      it's identity, confidence, and expression.
+    </p>
+
+    <p>
+      Our collections are carefully curated to bring you premium quality,
+      modern elegance, and timeless designs for Men, Women, Kids, and more.
+    </p>
+
+    <p>
+      We establish personal relationships with our boutiques to ensure a
+      stress-free, luxury shopping experience for every customer.
+    </p>
+
+    <a href="contact.html" class="btn">Contact Us</a>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 Purem Oda. All Rights Reserved.</p>
+</footer>
+
 </body>
 </html>
